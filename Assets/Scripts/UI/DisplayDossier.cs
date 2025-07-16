@@ -4,8 +4,8 @@ using TMPro;
 public class DisplayDossier : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private TextMeshProUGUI dossierText; // Текстовый элемент для отображения
-    [SerializeField] private CaseGenerator caseGenerator; // Ссылка на генератор
+    [SerializeField] private TextMeshProUGUI dossierText;
+    [SerializeField] private CaseGenerator caseGenerator; 
 
     private CaseGenerator.CriminalRecord criminalRecord;
     
