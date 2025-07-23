@@ -30,10 +30,11 @@ public class CaseGenerator : MonoBehaviour
         public string Gender;
         public CrimeType Crime;
         public List<string> Evidence;
+        public bool IsGuilty;
 
         public override string ToString()
         {
-            return $"Имя: {FirstName}\nФамилия: {LastName}\nВозраст: {Age}\nМесто проживания: {Residence}\nПол: {Gender}\nПреступление: {Crime}\nУлики: {string.Join(", ", Evidence)}";
+            return $"Имя: {FirstName}\nФамилия: {LastName}\nВозраст: {Age}\nМесто проживания: {Residence}\nПол: {Gender}\nПреступление: {Crime}\nУлики: {string.Join(", ", Evidence)}\nВиновность: {IsGuilty}";
         }
     }
 
@@ -80,8 +81,39 @@ public class CaseGenerator : MonoBehaviour
         record.Crime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
         record.Evidence = GenerateEvidence(record.Crime);
 
+        // 80% виновный, 20% невиновный
+        record.IsGuilty = Random.Range(0, 100) < 80;
+
+        if (Random.Range(0, 100) < 30) // 30% шанс на испорченное дело
+        {
+            CreateSpoiledCase(record);
+        }
+
+
         return record;
     }
+
+    private void CreateSpoiledCase(CriminalRecord record)
+    {
+        // несовпадение пола и имени
+        if (Random.Range(0, 2) == 0)
+        {
+            record.Gender = record.Gender == "Мужской" ? "Женский" : "Мужской";
+        }
+
+        // несоответствие улик
+        if (Random.Range(0, 2) == 0 && record.Crime == CrimeType.Кража)
+        {
+            record.Evidence.Add("Детские игрушки");
+        }
+
+        // подобное
+        if (Random.Range(0, 2) == 0)
+        {
+            record.Evidence.Add("Документ, принадлежащий другому преступнику");
+        }
+    }
+
 
     private List<string> GenerateEvidence(CrimeType crimeType)
     {
@@ -183,37 +215,70 @@ public class CaseGenerator : MonoBehaviour
             float randomValue = Random.value;
             const string evidenceColor = "#FF0000";
 
-            if (randomValue < 0.6f) // 60% правдивые
-            {
-                testimony.Type = TestimonyType.Правдивое;
-                testimony.RelevantCrime = record.Crime;
-                string evidence = record.Evidence[Random.Range(0, record.Evidence.Count)];
-                string template = truthfulTemplates[record.Crime][Random.Range(0, truthfulTemplates[record.Crime].Count)];
-                testimony.Description = string.Format(template, $"<color={evidenceColor}>{evidence}</color>");
-            }
-            else if (randomValue < 0.9f) // 30% ложные
-            {
-                testimony.Type = TestimonyType.Ложное;
 
-                // Выбираем случайное преступление, отличное от реального
-                CrimeType falseCrime;
-                do
+            if (record.IsGuilty) // если виновен
+            {
+                if (randomValue < 0.7f) // 70% правдивые
                 {
-                    falseCrime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
-                } while (falseCrime == record.Crime);
+                    testimony.Type = TestimonyType.Правдивое;
+                    testimony.RelevantCrime = record.Crime;
+                    string evidence = record.Evidence[Random.Range(0, record.Evidence.Count)];
+                    string template = truthfulTemplates[record.Crime][Random.Range(0, truthfulTemplates[record.Crime].Count)];
+                    testimony.Description = string.Format(template, $"<color={evidenceColor}>{evidence}</color>");
+                }
+                else if (randomValue < 0.9f) // 20% false
+                {
+                    testimony.Type = TestimonyType.Ложное;
 
-                testimony.RelevantCrime = falseCrime;
-                string falseEvidence = evidencePools[falseCrime][Random.Range(0, evidencePools[falseCrime].Count)];
-                string template = truthfulTemplates[falseCrime][Random.Range(0, truthfulTemplates[falseCrime].Count)];
-                testimony.Description = string.Format(template, $"<color={evidenceColor}>{falseEvidence}</color>");
+                    // Выбираем случайное преступление, отличное от реального
+                    CrimeType falseCrime;
+                    do
+                    {
+                        falseCrime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
+                    } while (falseCrime == record.Crime);
+
+                    testimony.RelevantCrime = falseCrime;
+                    string falseEvidence = evidencePools[falseCrime][Random.Range(0, evidencePools[falseCrime].Count)];
+                    string template = truthfulTemplates[falseCrime][Random.Range(0, truthfulTemplates[falseCrime].Count)];
+                    testimony.Description = string.Format(template, $"<color={evidenceColor}>{falseEvidence}</color>");
+                }
+                else // 10% нейтральные
+                {
+                    testimony.Type = TestimonyType.Нейтральное;
+                    testimony.RelevantCrime = null;
+                    testimony.Description = neutralTemplates[Random.Range(0, neutralTemplates.Count)];
+                }
             }
-            else // 10% нейтральные
+            else // если человек не виновен
             {
-                testimony.Type = TestimonyType.Нейтральное;
-                testimony.RelevantCrime = null;
-                testimony.Description = neutralTemplates[Random.Range(0, neutralTemplates.Count)];
+                if (randomValue < 0.3f) // 30% правдивые показания
+                {
+                    testimony.Type = TestimonyType.Правдивое;
+                    testimony.RelevantCrime = record.Crime;
+                    string evidence = record.Evidence[Random.Range(0, record.Evidence.Count)];
+                    string template = truthfulTemplates[record.Crime][Random.Range(0, truthfulTemplates[record.Crime].Count)];
+                    testimony.Description = string.Format(template, $"<color={evidenceColor}>{evidence}</color>");
+                }
+                else if (randomValue < 0.8f) // 50% ложные показания
+                {
+                    testimony.Type = TestimonyType.Ложное;
+                    CrimeType falseCrime;
+                    do
+                    {
+                        falseCrime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
+                    } while (falseCrime == record.Crime);
+                    testimony.RelevantCrime = falseCrime;
+                    string falseEvidence = evidencePools[falseCrime][Random.Range(0, evidencePools[falseCrime].Count)];
+                    string template = truthfulTemplates[falseCrime][Random.Range(0, truthfulTemplates[falseCrime].Count)];
+                    testimony.Description = string.Format(template, $"<color={evidenceColor}>{falseEvidence}</color>");
+                }
+                else // 20% нейтральные показания
+                {
+                    testimony.Type = TestimonyType.Нейтральное;
+                    testimony.RelevantCrime = null;
+                    testimony.Description = neutralTemplates[Random.Range(0, neutralTemplates.Count)];
+                }
             }
-
             testimonies.Add(testimony); // Добавляем показание в список
     }
 
