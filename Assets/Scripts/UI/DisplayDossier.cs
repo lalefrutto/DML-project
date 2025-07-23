@@ -26,7 +26,8 @@ public class DisplayDossier : MonoBehaviour
     private void UpdateDossierText()
     {
 
-        CaseGenerator.CriminalRecord record = caseGenerator.GenerateCriminalRecord();
+        // CaseGenerator.CriminalRecord record = caseGenerator.GenerateCriminalRecord();
+        CaseGenerator.CriminalRecord record = criminalRecord;
         
         string formattedText = $"<b>ДОСЬЕ ПРЕСТУПНИКА</b>\n\n";
         formattedText += $"<b>Имя:</b> {record.FirstName}\n";

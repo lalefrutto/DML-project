@@ -42,11 +42,6 @@ public class CaseGenerator : MonoBehaviour
 
     public EvidenceBox EvidenceBox;
 
-    void Awake()
-    {
-        
-    }
-
     public void InitializeGenerator()
     {
         InitializeEvidencePools();
@@ -99,16 +94,20 @@ public class CaseGenerator : MonoBehaviour
             string evidenceItem = pool[Random.Range(0, pool.Count)];
             evidenceList.Add(evidenceItem);
 
-            if (EvidenceBox != null)
+            // if (EvidenceBox != null)
+            // {
+            //     EvidenceBox.AddEvidence(evidenceItem);
+            // }
+        }
+        evidenceList = new List<string>(new HashSet<string>(evidenceList));
+        if (EvidenceBox != null)
+        {
+            foreach (var evidenceItem in evidenceList)
             {
                 EvidenceBox.AddEvidence(evidenceItem);
             }
-            else
-            {
-                //
-            }
         }
-        evidenceList = new List<string>(new HashSet<string>(evidenceList));
+
         return evidenceList;
     }
     #endregion

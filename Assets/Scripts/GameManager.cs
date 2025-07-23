@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private CaseGenerator.WitnessTestimony witnessTestimony;
 
     [SerializeField] private CaseGenerator caseGenerator;
+    [SerializeField] private EvidenceBox evidenceBox;
     // caseGenerator.GenerateWitnessTestimony(getDossier.GetCriminalRecord());
 
     void Awake()
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         caseGenerator.InitializeGenerator();
+        caseGenerator.EvidenceBox = evidenceBox;
 
         generateCriminalRecord();
         generateWitnessTestimony();

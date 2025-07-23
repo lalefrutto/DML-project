@@ -67,7 +67,7 @@ public class WitnessDialogue : MonoBehaviour
     #region Absolute Cinema
 
     private string GenerateFullTestimony(CaseGenerator.WitnessTestimony testimony)
-{
+    {
     StringBuilder sb = new StringBuilder();
     sb.Append(GetRandomPhrase(PhraseType.Opening)).Append(" ");
 
@@ -92,7 +92,7 @@ public class WitnessDialogue : MonoBehaviour
 
     sb.Append(" ").Append(GetRandomPhrase(PhraseType.Ending)).Append(" ");
     return sb.ToString();
-}
+    }
 
 
 
