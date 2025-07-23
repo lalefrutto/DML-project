@@ -172,45 +172,53 @@ public class CaseGenerator : MonoBehaviour
         };
     }
 
-    public WitnessTestimony GenerateWitnessTestimony(CriminalRecord record)
-    {   
-        WitnessTestimony testimony = new WitnessTestimony();
-        float randomValue = Random.value;
-        const string evidenceColor = "#FF0000";
+    public List<WitnessTestimony> GenerateWitnessTestimonies(CriminalRecord record)
+    {
+        List<WitnessTestimony> testimonies = new List<WitnessTestimony>();
+        int numberOfTestimonies = Random.Range(2, 5); // Генерируем случайное количество показаний от 2 до 4
 
-        if (randomValue < 0.6f) // 60% правдивые
+        for (int i = 0; i < numberOfTestimonies; i++)
         {
-            testimony.Type = TestimonyType.Правдивое;
-            testimony.RelevantCrime = record.Crime;
-            string evidence = record.Evidence[Random.Range(0, record.Evidence.Count)];
-            string template = truthfulTemplates[record.Crime][Random.Range(0, truthfulTemplates[record.Crime].Count)];
-            testimony.Description = string.Format(template, $"<color={evidenceColor}>{evidence}</color>");
-        }
-        else if (randomValue < 0.9f) // 30% ложные
-        {
-            testimony.Type = TestimonyType.Ложное;
+            WitnessTestimony testimony = new WitnessTestimony();
+            float randomValue = Random.value;
+            const string evidenceColor = "#FF0000";
 
-            // Выбираем случайное преступление, отличное от реального
-            CrimeType falseCrime;
-            do
+            if (randomValue < 0.6f) // 60% правдивые
             {
-                falseCrime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
-            } while (falseCrime == record.Crime);
+                testimony.Type = TestimonyType.Правдивое;
+                testimony.RelevantCrime = record.Crime;
+                string evidence = record.Evidence[Random.Range(0, record.Evidence.Count)];
+                string template = truthfulTemplates[record.Crime][Random.Range(0, truthfulTemplates[record.Crime].Count)];
+                testimony.Description = string.Format(template, $"<color={evidenceColor}>{evidence}</color>");
+            }
+            else if (randomValue < 0.9f) // 30% ложные
+            {
+                testimony.Type = TestimonyType.Ложное;
 
-            testimony.RelevantCrime = falseCrime;
-            string falseEvidence = evidencePools[falseCrime][Random.Range(0, evidencePools[falseCrime].Count)];
-            string template = truthfulTemplates[falseCrime][Random.Range(0, truthfulTemplates[falseCrime].Count)];
-            testimony.Description = string.Format(template, $"<color={evidenceColor}>{falseEvidence}</color>");
-        }
-        else // 10% нейтральные
-        {
-            testimony.Type = TestimonyType.Нейтральное;
-            testimony.RelevantCrime = null;
-            testimony.Description = neutralTemplates[Random.Range(0, neutralTemplates.Count)];
-        }
+                // Выбираем случайное преступление, отличное от реального
+                CrimeType falseCrime;
+                do
+                {
+                    falseCrime = (CrimeType)Random.Range(0, Enum.GetValues(typeof(CrimeType)).Length);
+                } while (falseCrime == record.Crime);
 
-        return testimony;
+                testimony.RelevantCrime = falseCrime;
+                string falseEvidence = evidencePools[falseCrime][Random.Range(0, evidencePools[falseCrime].Count)];
+                string template = truthfulTemplates[falseCrime][Random.Range(0, truthfulTemplates[falseCrime].Count)];
+                testimony.Description = string.Format(template, $"<color={evidenceColor}>{falseEvidence}</color>");
+            }
+            else // 10% нейтральные
+            {
+                testimony.Type = TestimonyType.Нейтральное;
+                testimony.RelevantCrime = null;
+                testimony.Description = neutralTemplates[Random.Range(0, neutralTemplates.Count)];
+            }
+
+            testimonies.Add(testimony); // Добавляем показание в список
     }
+
+    return testimonies; // Возвращаем список показаний
+    }   
 
     #endregion
 }

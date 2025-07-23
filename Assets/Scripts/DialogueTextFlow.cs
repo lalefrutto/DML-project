@@ -2,20 +2,23 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System;
 
 public class DialogueTextFlow : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public float textSpeed;
 
-    private string[] lines;  
+    public event Action OnDialogueEnded;
+
+    private string[] lines;
     private int index;
 
     public void SetDialogueLines(string[] newLines)
     {
         lines = newLines;
     }
-    
+
     public void StartDialogue()
     {
         index = 0;
@@ -24,11 +27,17 @@ public class DialogueTextFlow : MonoBehaviour
         StartCoroutine(TypeLine());
     }
 
+    public void EndDialogue()
+    {
+        OnDialogueEnded?.Invoke();
+        gameObject.SetActive(false);
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (lines == null || index < 0 || index >= lines.Length) 
+            if (lines == null || index < 0 || index >= lines.Length)
                 return;
 
             if (textComponent.text == lines[index])
@@ -59,10 +68,10 @@ public class DialogueTextFlow : MonoBehaviour
             {
                 int tagEnd = line.IndexOf('>', i);
                 if (tagEnd == -1) tagEnd = line.Length - 1;
-                
+
                 currentText += line.Substring(i, tagEnd - i + 1);
                 textComponent.text = currentText;
-                
+
                 i = tagEnd + 1;
                 continue;
             }
@@ -70,7 +79,7 @@ public class DialogueTextFlow : MonoBehaviour
             currentText += line[i];
             textComponent.text = currentText;
             i++;
-            
+
             if (!inTag)
             {
                 yield return new WaitForSeconds(textSpeed);
@@ -88,8 +97,18 @@ public class DialogueTextFlow : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
-            lines = null; 
+            // gameObject.SetActive(false);
+            EndDialogue();
+            // lines = null;
         }
+    }
+    
+
+    public void ResetDialogue()
+    {
+        StopAllCoroutines();
+        lines = null;
+        index = 0;
+        textComponent.text = string.Empty;
     }
 }

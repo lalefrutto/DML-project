@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,11 +10,20 @@ public class GameManager : MonoBehaviour
     private bool _trialCanStart;
 
     private CaseGenerator.CriminalRecord criminalRecord;
-    private CaseGenerator.WitnessTestimony witnessTestimony;
+    private List<CaseGenerator.WitnessTestimony> witnessTestimonies;
+    private int _witnessCount;
+
+    public int getWitnessCount()
+    {
+        return _witnessCount;
+    }
+
+
 
     [SerializeField] private CaseGenerator caseGenerator;
     [SerializeField] private EvidenceBox evidenceBox;
     // caseGenerator.GenerateWitnessTestimony(getDossier.GetCriminalRecord());
+
 
     void Awake()
     {
@@ -30,7 +41,8 @@ public class GameManager : MonoBehaviour
 
     private void generateWitnessTestimony()
     {
-        this.witnessTestimony = caseGenerator.GenerateWitnessTestimony(this.criminalRecord);
+        this.witnessTestimonies = caseGenerator.GenerateWitnessTestimonies(this.criminalRecord);
+        _witnessCount = (witnessTestimonies as ICollection)?.Count ?? 0;
     }
 
     private void generateCriminalRecord()
@@ -57,9 +69,9 @@ public class GameManager : MonoBehaviour
         return criminalRecord;
     }
     
-    public CaseGenerator.WitnessTestimony GetWitnessTestimony()
+    public CaseGenerator.WitnessTestimony GetWitnessTestimonyFrom(int numberOfWitness)
     {
-        return witnessTestimony;
+        return witnessTestimonies[numberOfWitness];
     }
     
 }

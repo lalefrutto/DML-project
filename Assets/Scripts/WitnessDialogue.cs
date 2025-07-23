@@ -10,6 +10,7 @@ public class WitnessDialogue : MonoBehaviour
     [SerializeField] private CaseGenerator caseGenerator;
     [SerializeField] private DisplayDossier getDossier;
     [SerializeField] private DialogueTextFlow dialogueTextFlow;
+    [SerializeField] private WitnessManager witnessManager;
 
     private Dictionary<PhraseType, List<string>> phraseTemplates = new Dictionary<PhraseType, List<string>>();
 
@@ -58,40 +59,69 @@ public class WitnessDialogue : MonoBehaviour
     // was Start
     void Awake()
     {
-        InitializeDefaultPhrases();
-        CaseGenerator.WitnessTestimony testimony = GameManager.Instance.GetWitnessTestimony();
-        giveWitnessTestimony(testimony);
+        // InitializeDefaultPhrases();
+        // CaseGenerator.WitnessTestimony testimony = GameManager.Instance.GetWitnessTestimonyFrom(witnessManager.GetCurrentWitnessIndex());
+        // giveWitnessTestimony(testimony);
         // give dialogue text flow the string
+
+        InitializeDefaultPhrases();
+        witnessManager.OnWitnessChanged += HandleWitnessChanged; // Подписка на событие
+        InitializeForCurrentWitness(); // Инициализация для первого свидетеля
     }
+    
+
+    private void OnDestroy()
+    {
+        // Отписываемся при уничтожении объекта
+        if (witnessManager != null)
+        {
+            witnessManager.OnWitnessChanged -= HandleWitnessChanged;
+        }
+    }
+
+    private void HandleWitnessChanged()
+    {
+        InitializeForCurrentWitness();
+    }
+
+    public void InitializeForCurrentWitness()
+    {
+        Debug.Log(witnessManager.GetCurrentWitnessIndex());
+        CaseGenerator.WitnessTestimony testimony = GameManager.Instance.GetWitnessTestimonyFrom(
+            witnessManager.GetCurrentWitnessIndex()
+        );
+        giveWitnessTestimony(testimony);
+    }
+
 
     #region Absolute Cinema
 
     private string GenerateFullTestimony(CaseGenerator.WitnessTestimony testimony)
     {
-    StringBuilder sb = new StringBuilder();
-    sb.Append(GetRandomPhrase(PhraseType.Opening)).Append(" ");
+        StringBuilder sb = new StringBuilder();
+        sb.Append(GetRandomPhrase(PhraseType.Opening)).Append(" ");
 
-    string[] sentences = SplitIntoSentences(testimony.Description);
-    if (sentences.Length == 0) return sb.ToString().Trim();
+        string[] sentences = SplitIntoSentences(testimony.Description);
+        if (sentences.Length == 0) return sb.ToString().Trim();
 
-    int insertPoint = sentences.Length > 3 ? sentences.Length / 2 : -1;
+        int insertPoint = sentences.Length > 3 ? sentences.Length / 2 : -1;
 
-    for (int i = 0; i < sentences.Length; i++)
-    {
-        sb.Append(sentences[i]);
-
-        if (i == insertPoint)
+        for (int i = 0; i < sentences.Length; i++)
         {
-            sb.Append(" ").Append(GetRandomPhrase(PhraseType.Between)).Append(" ");
-        }
-        else if (i < sentences.Length - 1)
-        {
-            sb.Append(" ");
-        }
-    }
+            sb.Append(sentences[i]);
 
-    sb.Append(" ").Append(GetRandomPhrase(PhraseType.Ending)).Append(" ");
-    return sb.ToString();
+            if (i == insertPoint)
+            {
+                sb.Append(" ").Append(GetRandomPhrase(PhraseType.Between)).Append(" ");
+            }
+            else if (i < sentences.Length - 1)
+            {
+                sb.Append(" ");
+            }
+        }
+
+        sb.Append(" ").Append(GetRandomPhrase(PhraseType.Ending)).Append(" ");
+        return sb.ToString();
     }
 
 
