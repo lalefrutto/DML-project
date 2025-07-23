@@ -22,6 +22,8 @@ public class NotebookUIManager : MonoBehaviour
     [Header("Prefabs")]
     public GameObject evidenceItemPrefab;
     public GameObject testimonyItemPrefab;
+    
+    // [SerializeField] private PlayerCheck playerCheck; 
 
     private void Start()
     {
@@ -30,7 +32,7 @@ public class NotebookUIManager : MonoBehaviour
         evidenceTabButton.onClick.AddListener(ShowEvidencePanel);
         testimonyTabButton.onClick.AddListener(ShowTestimonyPanel);
 
-        CloseNotebook(); 
+        CloseNotebook();
     }
 
     public void OpenNotebook()
@@ -64,8 +66,26 @@ public class NotebookUIManager : MonoBehaviour
 
     public void AddTestimony(CaseGenerator.WitnessTestimony testimony)
     {
-        GameObject item = Instantiate(testimonyItemPrefab, testimonyListContent);
-        TMP_Text textComponent = item.GetComponentInChildren<TMP_Text>();
-        textComponent.text = testimony.Description;
+        if (testimony != null && testimony.Description != null)
+        {
+            GameObject item = Instantiate(testimonyItemPrefab, testimonyListContent);
+
+            TMP_Text textComponent = item.GetComponentInChildren<TMP_Text>();
+            if (textComponent != null)
+            {
+                textComponent.text = testimony.Description;
+            }
+            else
+            {
+                Debug.LogWarning("TMP_Text component not found in the testimony item prefab.");
+            }
+
+            // PlayerCheck.Instance.AddTestimonyType(testimony.Type); (Если необходимо)
+        }
+        else
+        {
+            Debug.LogWarning("Testimony or its description is null.");
+        }
+        // PlayerCheck.Instance.AddTestimonyType(testimony.Type);
     }
 }

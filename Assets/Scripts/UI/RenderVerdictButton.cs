@@ -4,13 +4,29 @@ using UnityEngine.EventSystems;
 
 public class RenderVerdictButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+
+    [Header("Sprite Settings")]
+    public Sprite normalSprite;    
+    public Sprite selectedSprite; 
+    
+    private Image buttonImage;     
+
+     void Awake()
+    {
+        buttonImage = GetComponent<Image>();
+    }
+
+
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ActionDescriptor.ShowAction("Вынести вердикт (в разработке)");
+        buttonImage.sprite = selectedSprite;
+        ActionDescriptor.ShowAction("Вынести вердикт");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        buttonImage.sprite = normalSprite;
         ActionDescriptor.HideAction();
     }  
 }

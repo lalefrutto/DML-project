@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c902a0f47680e7a4cafc366beb015c2f
+guid: 3d2a9741e36f53e4483866e6679a2339
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8962691058166195743
-    second: judge_gravel_0
+      213: 3944848134721633502
+    second: witness_6_selected_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: judge_gravel_0
+      name: witness_6_selected_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 36
-        width: 815
-        height: 515
+        x: 27
+        y: 71
+        width: 186
+        height: 658
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f16e091f700e16c70800000000000000
-      internalID: 8962691058166195743
+      spriteID: edcf1f25a7aeeb630800000000000000
+      internalID: 3944848134721633502
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      judge_gravel_0: 8962691058166195743
+      witness_6_selected_0: 3944848134721633502
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

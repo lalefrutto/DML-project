@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public StartTrialButton startTrialButton;
     private bool _trialCanStart;
+    private int _dayCounter;
 
     private CaseGenerator.CriminalRecord criminalRecord;
     private List<CaseGenerator.WitnessTestimony> witnessTestimonies;
@@ -17,8 +18,6 @@ public class GameManager : MonoBehaviour
     {
         return _witnessCount;
     }
-
-
 
     [SerializeField] private CaseGenerator caseGenerator;
     [SerializeField] private EvidenceBox evidenceBox;
@@ -68,10 +67,29 @@ public class GameManager : MonoBehaviour
     {
         return criminalRecord;
     }
-    
+
     public CaseGenerator.WitnessTestimony GetWitnessTestimonyFrom(int numberOfWitness)
     {
-        return witnessTestimonies[numberOfWitness];
+        // return witnessTestimonies[numberOfWitness];
+
+        if (numberOfWitness >= 0 && numberOfWitness < witnessTestimonies.Count)
+        {
+            return witnessTestimonies[numberOfWitness];
+        }
+        else
+        {
+            return null;
+        }
     }
-    
+
+    private void endDay()
+    {
+        _dayCounter++;
+        // implementation
+    }
+
+    public int getDayNumber()
+    {
+        return _dayCounter;
+    }
 }

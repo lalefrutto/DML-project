@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: c902a0f47680e7a4cafc366beb015c2f
+guid: 4cf241ef9edecbe4890e03b493b701e8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8962691058166195743
-    second: judge_gravel_0
+      213: 5184991883674516916
+    second: judge_gravel_selected 1_0
+  - first:
+      213: 6707490869661675658
+    second: judge_gravel_selected 1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: judge_gravel_0
+      name: judge_gravel_selected 1_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 36
-        width: 815
-        height: 515
+        x: 49
+        y: 120
+        width: 467
+        height: 258
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f16e091f700e16c70800000000000000
-      internalID: 8962691058166195743
+      spriteID: 4bdf3bd95aac4f740800000000000000
+      internalID: 5184991883674516916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: judge_gravel_selected 1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 326
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a803c5c786bc51d50800000000000000
+      internalID: 6707490869661675658
       vertices: []
       indices: 
       edges: []
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      judge_gravel_0: 8962691058166195743
+      judge_gravel_selected 1_0: 5184991883674516916
+      judge_gravel_selected 1_1: 6707490869661675658
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
